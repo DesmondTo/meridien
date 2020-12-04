@@ -1,0 +1,188 @@
+<mat-horizontal-stepper class= "container" #stepper [linear]=true (selectionChange)="selectionChange($event)">
+
+    <mat-step [stepControl]="detailsForm">
+        <form [formGroup]="detailsForm" (ngSubmit)="checkout()">
+            <ng-template matStepLabel>Applicant Details</ng-template>
+            <mat-form-field style="width:40%">
+                <mat-label>Name</mat-label>
+                <input matInput required class="form-control" formControlName="name">
+                <mat-error>Please enter a name.</mat-error>
+            </mat-form-field>
+
+            <span style="margin-left: 10%;"></span>
+
+            <mat-form-field style="width:40%">
+                <mat-label>Organization</mat-label>
+                <input matInput required class="form-control" formControlName="organization">
+                <mat-error>Please enter a student organization.</mat-error>
+            </mat-form-field>
+
+            <br>
+
+            <mat-form-field style="width:40%">
+                <mat-label>NUS Email (e.g. e1234567@u.nus.edu)</mat-label>
+                <input matInput required class="form-control" formControlName="email">
+                <mat-error>Please enter a valid NUS email.</mat-error>
+            </mat-form-field>
+
+            <span style="margin-left: 10%;"></span>
+
+            <mat-form-field style="width:40%">
+                <mat-label>Contact Number</mat-label>
+                <input matInput required class="form-control" formControlName="phone_no">
+                <mat-error>Please enter a valid contact number.</mat-error>
+            </mat-form-field>
+
+            <br>
+
+            <mat-form-field style="width:90%">
+                <mat-label>Purpose</mat-label>
+                <textarea matInput required class="form-control" formControlName="reason"></textarea>
+                <mat-error>Please provide reasons for loaning.</mat-error>
+            </mat-form-field>
+
+            <br>
+
+            <mat-form-field style="width:40%">
+                <mat-label>From (dd/mm/yyyy)</mat-label>
+                <input matInput class="form-control" [matDatepicker]="startpicker" required class="form-control"
+                    formControlName="loan_start_time" [max]="detailsForm.controls.loan_end_time.value">
+                <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+                <mat-datepicker #startpicker></mat-datepicker>
+                <mat-error>Please enter a valid date.</mat-error>
+            </mat-form-field>
+
+            <span style="margin-left: 10%;"></span>
+
+            <mat-form-field style="width:40%">
+                <mat-label>To (dd/mm/yyyy)</mat-label>
+                <input matInput class="form-control" [matDatepicker]="endpicker" required class="form-control"
+                    formControlName="loan_end_time" [min]="detailsForm.controls.loan_start_time.value">
+                <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+                <mat-datepicker #endpicker></mat-datepicker>
+                <mat-error>Please enter a valid date.</mat-error>
+            </mat-form-field>
+
+            <br>
+            
+            <button matStepperNext mat-raised-button color="primary" [disabled]="!detailsForm.valid">Next</button>
+        </form>
+    </mat-step>
+
+    <mat-step [stepControl]="itemsForm">
+        <form [formGroup]="itemsForm" (ngSubmit)="checkout">
+            <ng-template matStepLabel>Select Items</ng-template>
+            <div formArrayName="items" *ngFor="let itemControl of getItemInputForm().controls; let i = index;"
+                style="margin-bottom: 2%;">
+                <div [formGroupName]="i">
+                    <mat-form-field style="width:50%">
+                        <mat-label>Items</mat-label>
+                        <mat-select required class="form-control" formControlName="item">
+                            <mat-option *ngFor="let item of itemArray" [value]="item.id">{{item.name}}</mat-option>
+                        </mat-select>
+                        <mat-error>Please choose a different item.</mat-error>
+                    </mat-form-field>
+                    <span style="margin-left: 10%;"></span>
+                    <mat-form-field style="width:15%">
+                        <mat-label>Quantity</mat-label>
+                        <input matInput type="number" min="1" value="1" pattern="\d+" required class="form-control"
+                            formControlName="quantity">
+                        <mat-error>Please enter a positive number.</mat-error>
+                    </mat-form-field>
+                    <button mat-raised-button color="warn" style="float:right;" (click)="removeItemInput(i)"
+                        [disabled]="getItemInputForm().controls.length==1">
+                        <mat-icon matPrefix>delete_forever</mat-icon>
+                        Delete
+                    </button>
+                </div>
+            </div>
+
+            <button mat-raised-button color="primary" style="margin-right: 1%;" (click)="addBlankItem()">
+                <mat-icon matPrefix>add</mat-icon>
+                Add Row
+            </button>
+            <button matStepperNext mat-raised-button color="primary" [disabled]="!itemsForm.valid"
+                type="submit">Next</button>
+        </form>
+        <div class="parent" style="margin-top: 10px;">
+            <p class="fade child" style="color: #f44336;" [style.opacity]="checkForErrors().duplicate ? '1' : '0'"
+                [style.visibility]="checkForErrors().duplicate ? 'visible' : 'hidden'">There are duplicate items in your
+                booking.</p>
+            <p class="fade child" style="color: #f44336;" [style.opacity]="checkForErrors().exceed ? '1' : '0'"
+                [style.visibility]="checkForErrors().exceed ? 'visible' : 'hidden'">Some of your bookings are not
+                fulfillable.</p>
+        </div>
+    </mat-step>
+
+    <mat-step>
+        <ng-template matStepLabel>Checkout</ng-template>
+        <p>You may want to print this page for your reference. Note that you are required to agree to the PDPA clause
+            before you submit a booking.</p>
+        <div class="row" style="margin-bottom: 20px;">
+            <h2>Booking Details</h2>
+            <div class="column-left" style="margin-top: -20px; margin-left: -15px;">
+                <mat-list role="list">
+                    <mat-list-item role="listitem">Name: {{inputGroup1['name']}}</mat-list-item>
+                    <mat-list-item role="listitem">Organization: {{inputGroup1['organization']}}</mat-list-item>
+                    <mat-list-item role="listitem">Email: {{inputGroup1['email']}}</mat-list-item>
+                    <mat-list-item role="listitem">Contact Number: {{inputGroup1['phone_no']}}</mat-list-item>
+                    <mat-list-item role="listitem">Purpose: {{inputGroup1['reason']}}</mat-list-item>
+                    <mat-list-item role="listitem">From: {{inputGroup1['loan_start_time']|date: 'd/M/yyyy'}}
+                    </mat-list-item>
+                    <mat-list-item role="listitem">To: {{inputGroup1['loan_end_time']|date: 'd/M/yyyy'}}</mat-list-item>
+                </mat-list>
+            </div>
+            <div class="column-right">
+                <mat-table [dataSource]="inputGroup2.items" class="mat-elevation-z8">
+                    <ng-container matColumnDef="item">
+                        <mat-header-cell *matHeaderCellDef> Item </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{returnItemGivenId(element.item).name}}
+                        </mat-cell>
+                        <mat-footer-cell *matFooterCellDef>Deposit Payable</mat-footer-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="quantity">
+                        <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> {{element.quantity}} </mat-cell>
+                        <mat-footer-cell *matFooterCellDef>{{getTotalDeposit()|currency}}</mat-footer-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="itemColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: itemColumns;"></mat-row>
+                    <mat-footer-row *matFooterRowDef="itemColumns"></mat-footer-row>
+                </mat-table>
+            </div>
+        </div>
+        <div style="margin-bottom: 30px;">
+            <h2>Personal Data Protection Act</h2>
+
+            <mat-checkbox #c required [checked]="editMode">
+                <span>I consent to providing my Personal Data to NUSSU EXCO. By indicating my consent to provide my
+                    personal
+                    data in this form, I agree to receive updates and important announcements for the purpose of
+                    logistics
+                    sharing from NUSSU EXCO by email and phone. All personal information will be kept confidential and
+                    used
+                    for the purpose(s) stated only.</span>
+            </mat-checkbox>
+
+            <h2 style="margin-top: 30px">Withdrawal of Consent</h2>
+
+            <mat-checkbox #d required [checked]="editMode">
+                <span>To help you make an informed decision, withdrawing consent will result in not being able to
+                    receive
+                    updates and important announcements for the purpose of logistics loans and sharing with NUSSU EXCO.
+                    Should you wish to withdraw your consent for NUSSU EXCO to contact you for the purposes stated
+                    above,
+                    please notify us in writing to logistics@nussu.org.sg. We will then remove your personal information
+                    from our database. Please allow 10 business days for your request to take effect.</span>
+            </mat-checkbox>
+        </div>
+        <button mat-raised-button color="primary" (click)=onSubmit() [disabled]="!c.checked||!d.checked">
+            <mat-icon>send</mat-icon>
+            Submit
+        </button>
+        <button mat-raised-button color="primary" (click)=print() style="margin-left: 10px">
+            <mat-icon>print</mat-icon>
+            Print
+        </button>
+    </mat-step>
+</mat-horizontal-stepper>

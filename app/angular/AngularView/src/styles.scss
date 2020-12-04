@@ -1,0 +1,122 @@
+@import "~@angular/material/theming";
+.mat-checkbox-layout {
+  white-space: normal !important;
+}
+
+@include mat-core();
+
+$nussu-blue: (
+  50: #e5e9ed,
+  100: #bdc7d2,
+  200: #91a2b4,
+  300: #657d95,
+  400: #44617f,
+  500: #234568,
+  600: #1f3e60,
+  700: #1a3655,
+  800: #152e4b,
+  900: #0c1f3a,
+  A100: #74a7ff,
+  A200: #4187ff,
+  A400: #0e67ff,
+  A700: #005af3,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+$nussu-orange: (
+  50: #fff7e0,
+  100: #ffeab3,
+  200: #ffdd80,
+  300: #ffcf4d,
+  400: #ffc426,
+  500: #ffba00,
+  600: #ffb300,
+  700: #ffab00,
+  800: #ffa300,
+  900: #ff9400,
+  A100: #ffffff,
+  A200: #fff9f2,
+  A400: #ffe1bf,
+  A700: #ffd5a6,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$AngularView-primary: mat-palette($nussu-blue, 500);
+$AngularView-accent: mat-palette($nussu-orange, 500);
+
+$AngularView-warn: mat-palette($mat-red);
+
+$AngularView-theme: mat-light-theme($AngularView-primary, $AngularView-accent, $AngularView-warn);
+
+$official-font: mat-typography-config(
+  $font-family: "Open Sans",
+);
+
+@include angular-material-theme($AngularView-theme);
+
+@include angular-material-typography($official-font);
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: #fefefe;
+}
+
+h1 {
+  color: #ffba00;
+}
+h2 {
+  color: #ffba00;
+}
+h3 {
+  color: #ffba00;
+}
+p {
+  color: #626262;
+}
+
+// other styling classes
+.field-full-width {
+  width: 100%;
+}
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+
+

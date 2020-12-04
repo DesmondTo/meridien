@@ -1,0 +1,22 @@
+<div class="container" style="padding-top:15px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px;">
+  <h1 style="padding-top:10px">Email Templates List</h1>
+  <p>Click each row for more details.</p>
+
+  <mat-table [dataSource]="templates" matSort class="mat-elevation-z8">
+    <ng-container  matColumnDef="id">
+      <mat-header-cell *matHeaderCellDef [ngClass]="'w-40'" mat-sort-header>S/N</mat-header-cell>
+      <mat-cell *matCellDef="let template" [ngClass]="'w-40'">{{template.id}}</mat-cell>
+    </ng-container>
+    <ng-container  matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let template">{{template.name}}</mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+    <mat-row matRipple *matRowDef="let template; columns: tableColumns;" (click)=openDetail(template)></mat-row>
+  </mat-table>
+  <mat-paginator class="mat-elevation-z8" [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+  <div style="text-align: center; width: 100%; margin: 10px">
+    <button mat-raised-button color="primary" (click)=openNew()>Add New Template</button>
+  <div>
+</div>
+

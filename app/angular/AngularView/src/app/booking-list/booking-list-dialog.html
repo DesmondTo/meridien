@@ -1,0 +1,106 @@
+<style>
+  .column-left {
+    float: left;
+    width: 50%;
+  }
+
+  .column-right {
+    float: right;
+    width: 50%;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  mat-label {
+    padding-top: 20px;
+  }
+</style>
+<h1 mat-dialog-title>Booking #{{bookingData.source.id}}</h1>
+
+<div mat-dialog-content class="row">
+  <div class="column-left">
+    <h2 style="color:#777777">Booking details</h2>
+    <mat-label>Booked by: {{bookingData.source.name}}</mat-label>
+    <br>
+    <mat-label>Organization: {{bookingData.source.organization}}</mat-label>
+    <br>
+    <mat-label>Email: {{bookingData.source.email}}</mat-label>
+    <br>
+    <mat-label>Contact Number: {{bookingData.source.phone_no}}</mat-label>
+    <br>
+    <mat-label>Time booked: {{bookingData.source.time_booked|date: 'd MMM yyyy HH:mm:ss'}}</mat-label>
+    <br>
+    <mat-label>Purpose: {{bookingData.source.reason}}</mat-label>
+    <br>
+    <mat-label>Loan date: {{bookingData.source.loan_start_time|date: 'd MMM yyyy'}}</mat-label>
+    <br>
+    <mat-label>Return date: {{bookingData.source.loan_end_time|date: 'd MMM yyyy'}}</mat-label>
+    <br>
+    <mat-label>Deposit left: ${{bookingData.source.deposit_left}}</mat-label>
+    <br>
+    <mat-label>Amount paid: ${{bookingData.source.amount_paid}}</mat-label>
+    <br>
+    <mat-label>Status: {{returnStatusString(bookingData.source.status)}}</mat-label>
+    <br>
+  </div>
+  <div class="column-right">
+    <h2 style="color:#777777">Items</h2>
+    <mat-table style="margin-top:-20px" [dataSource]=bookingData.booked_items>
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Item </mat-header-cell>
+        <mat-cell *matCellDef="let booked_item"> {{booked_item.item.name}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="quantity">
+        <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+        <mat-cell *matCellDef="let booked_item"> {{booked_item.quantity}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+        <mat-cell *matCellDef="let booked_item"> {{returnStatusString(booked_item.status)}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="tableColumnsBookedItems"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: tableColumnsBookedItems;"></mat-row>
+    </mat-table>
+  </div>
+</div>
+
+<div mat-dialog-actions *ngIf="bookingData.source.status === 'UNC' || returnStatusString(bookingData.source.status) === 'Unknown'" align="end">
+  <button mat-button (click)="confirmDelete()">
+    <mat-icon matPrefix>delete_forever</mat-icon>
+    Remove
+  </button>
+</div>
+
+<div mat-dialog-actions *ngIf="bookingData.source.status === 'PEN'" align="end">
+  <button mat-button (click)="editBooking()">
+    <mat-icon matPrefix>edit</mat-icon>
+    Edit
+  </button>
+
+  <button mat-button (click)="processAndEmail()">
+    <mat-icon matPrefix>email</mat-icon>
+    Process and Email
+  </button>
+</div>
+
+<!--Once processed, cannot edit, if want to edit, revoke first then edit-->
+<div mat-dialog-actions *ngIf="bookingData.source.status === 'PRO'" align="end">
+  <button mat-button (click)="revoke()">
+    <mat-icon matPrefix>undo</mat-icon>
+    Revoke
+  </button>
+
+  <button mat-button (click)="getLogistics()">
+    Retrieve Logistics
+  </button>
+</div>
+
+<div mat-dialog-actions *ngIf="bookingData.source.status === 'GET'" align="end">
+  <button mat-button (click)="returnLogistics()">
+    Return Logistics
+  </button>
+</div>

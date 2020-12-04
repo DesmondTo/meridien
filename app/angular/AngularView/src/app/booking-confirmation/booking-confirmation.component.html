@@ -1,0 +1,84 @@
+<style>
+  .column-left {
+    float: left;
+    width: 50%;
+  }
+
+  .column-right {
+    float: right;
+    width: 50%;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+</style>
+
+<div *ngIf="booking != null; else elseBlock" style="width: 80%; margin: 20px;">
+  <p style="font-size: 15px;" *ngIf="booking.status === 'UNC'; else elseWords">Before you are able to check the status
+    of your booking, you are to declare that you are the one who made the following booking.</p>
+  <ng-template #elseWords>Here are the booking details. Processing may take a few days to complete, and you will receive
+    an email response once the booking is processed. The deposit shown here is the <strong>maximum payable
+      deposit</strong> and may decrease after the booking is processed.</ng-template>
+  <h2 style="margin-top: 20px">Booking Details</h2>
+  <div class="row">
+    <div class="column-left">
+      <mat-list role="list" style="margin-left: -15px; margin-top: -15px;">
+        <mat-list-item role="listitem">Booking No.: {{booking.id}}</mat-list-item>
+        <mat-list-item role="listitem">Name: {{booking.name}}</mat-list-item>
+        <mat-list-item role="listitem">Email: {{booking.email}}</mat-list-item>
+        <mat-list-item role="listitem">Organization: {{booking.organization}}</mat-list-item>
+        <mat-list-item role="listitem">Purpose: {{booking.reason}}</mat-list-item>
+        <mat-list-item role="listitem">From: {{booking.loan_start_time|date: 'd/M/yyyy'}}</mat-list-item>
+        <mat-list-item role="listitem">To: {{booking.loan_end_time|date: 'd/M/yyyy'}}</mat-list-item>
+        <mat-list-item role="listitem" *ngIf="booking.status != 'UNC'">Status: {{returnStatusString(booking.status)}}
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div class="column-right">
+      <h2 style="color:#777777">Items</h2>
+      <mat-table style="margin-top:-5px" [dataSource]=bookedItems class="mat-elevation-z8">
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef> Item </mat-header-cell>
+          <mat-cell *matCellDef="let booked_item"> {{booked_item.item.name}} </mat-cell>
+          <mat-footer-cell *matFooterCellDef>Deposit Payable</mat-footer-cell>
+        </ng-container>
+        <ng-container matColumnDef="quantity">
+          <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+          <mat-cell *matCellDef="let booked_item"> {{booked_item.quantity}} </mat-cell>
+          <mat-footer-cell *matFooterCellDef>{{booking.deposit_left|currency}}</mat-footer-cell>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+          <mat-cell *matCellDef="let booked_item"> {{returnStatusString(booked_item.status)}} </mat-cell>
+          <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="tableColumnsBookedItems"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: tableColumnsBookedItems;"></mat-row>
+        <mat-footer-row *matFooterRowDef="tableColumnsBookedItems"></mat-footer-row>
+      </mat-table>
+    </div>
+  </div>
+  <button mat-raised-button color="primary" (click)="confirm_booking()" style="margin-right: 10px"
+    *ngIf="booking.status === 'UNC'" #confirmButton [disabled]="responded">
+    <mat-icon matPrefix>done</mat-icon>
+    Confirm
+  </button>
+  <button mat-raised-button color="primary" (click)="print()" #deleteButton [disabled]="responded"
+    style="margin-right: 10px">
+    <mat-icon matPrefix>print</mat-icon>
+    Print
+  </button>
+  <button mat-raised-button color="warn" (click)="delete_booking()" #deleteButton [disabled]="responded"
+    style="margin-right: 10px">
+    <mat-icon matPrefix>clear</mat-icon>
+    Delete
+  </button>
+</div>
+
+<!--this page needs redesign-->
+<ng-template #elseBlock>
+  <h2>Sorry, this booking has been deleted.</h2>
+</ng-template>

@@ -1,0 +1,66 @@
+@media print {
+    a,
+    app-logout:hover {
+        display: none;
+    }
+}
+
+.fast-fade {
+    transition: all 0.1s;
+}
+
+.sticky {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+#main-title {
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+.mat-toolbar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    text-transform: uppercase;
+    background-color: #fefefe;
+}
+
+.NUSSU {
+    text-decoration-line: underline overline;
+    text-decoration-style: solid;
+    text-decoration-color: rgb(255, 166, 0);
+    text-decoration-thickness: 3px;
+}
+
+
+.services a::before,
+.services a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: darkorange;
+    left: 0;
+    transform: scaleX(0);
+    transition: all .5s;
+}
+
+.services a::before {
+    top: 0;
+    transform-origin: left;
+}
+
+.services a::after {
+    bottom: 0;
+    transform-origin: right;
+}
+
+.services a:hover::before,
+.services a:hover::after{
+    transform:scaleX(1);
+    background-color: darkblue;
+}
+

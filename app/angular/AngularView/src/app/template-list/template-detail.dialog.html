@@ -1,0 +1,97 @@
+<style>
+  .column-left {
+    float: left;
+    width: 30%;
+  }
+
+  .column-right {
+    float: right;
+    width: 70%;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  ul {
+    list-style-type: none;
+    margin-top: 4px;
+  }
+</style>
+
+<h1 mat-dialog-title>{{(isEdit||isSendingEmail)?'Edit Template':'New Template'}}</h1>
+<div class="row">
+  <div class="column-left">
+    <div *ngIf="isSendingEmail; else editTemplate">
+      <h2>Booking #{{booking.id}}</h2>
+      <mat-label>Name: {{booking.name}}</mat-label>
+      <br>
+      <mat-label>Loan date: {{booking.loan_start_time}}</mat-label>
+      <br>
+      <mat-label>Return date: {{booking.loan_end_time}}</mat-label>
+      <br>
+      <mat-label>Items:</mat-label>
+      <br>
+      <ul>
+        <li *ngFor="let bookedItem of bookedItems">
+          <mat-checkbox style="margin-left: -15px" #checkBox [value]="bookedItem">
+            {{bookedItem.item.name}} - {{bookedItem.quantity}} items
+          </mat-checkbox>
+        </li>
+      </ul>
+      <br>
+      <mat-label>Deposit: {{getFinalDeposit()|currency}}</mat-label>
+    </div>
+    <ng-template #editTemplate>
+      <p style="margin-top: 100%; color: #cccccc;">You cannot view bookings with this option.</p>
+    </ng-template>
+  </div>
+  <div class="column-right">
+    <form [formGroup]="updateForm">
+      <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label for="name">Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill" style="width: 100%">
+        <mat-label for="subject">Subject</mat-label>
+        <input matInput formControlName="subject">
+      </mat-form-field>
+      <br>
+      <editor formControlName="template" [apiKey]="apiKey" [init]="{
+      height: 300,
+      menubar: false,
+      plugins: [
+        'advlist autolink lists link image charmap print preview anchor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media table paste code help wordcount',
+        'table'
+      ],
+      toolbar:
+        'undo redo | formatselect | bold italic underline backcolor | \
+        alignleft aligncenter alignright alignjustify | \
+        bullist numlist outdent indent | removeformat | help \
+        table tabledelete | tableprops tablerowprops tablecellprops | \
+        tableinsertrowbefore tableinsertrowafter tabledeleterow | \ 
+        tableinsertcolbefore tableinsertcolafter tabledeletecol | tablemergecells'
+    }"></editor>
+      <br>
+      <div mat-dialog-actions align="end">
+        <button mat-button (click)="closeDialog()" type="click">
+          <mat-icon>clear</mat-icon>
+          Cancel
+        </button>
+        <button mat-raised-button color="primary" type="submit" (click)="send_data(updateForm.value)" [disabled]="!updateForm.valid">
+          <mat-icon>{{(isEdit || isNew) ? 'done' : 'email'}}</mat-icon>
+          {{(isEdit || isNew) ? 'Submit' : 'Send'}}
+        </button>
+        <button mat-raised-button color="warn" [disabled]="isNew||isSendingEmail" (click)="confirmDelete()">
+          <mat-icon>delete_forever</mat-icon>
+          Delete
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

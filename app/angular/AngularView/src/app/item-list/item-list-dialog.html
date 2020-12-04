@@ -1,0 +1,86 @@
+<style>
+  .column-left {
+    float: left;
+    width: 40%;
+  }
+
+  .column-right {
+    float: right;
+    width: 55%;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  mat-list-item {
+    margin-top: 1%;
+    height: auto !important;
+    white-space: pre-wrap;
+  }
+
+  fc-scrollgrid {
+    height: auto !important;
+  }
+</style>
+
+<h1 mat-dialog-title>Item Details for {{itemData.item.name}}</h1>
+<mat-tab-group mat-dialog-content style="height: 550px">
+  <mat-tab label="Availability">
+    <div class="row">
+      <div class="column-left">
+        <mat-table [dataSource]=bookers matSort>
+          <ng-container matColumnDef="orgs">
+            <mat-header-cell *matHeaderCellDef> Organization </mat-header-cell>
+            <mat-cell *matCellDef="let bookings"> {{bookings.booking_source.organization}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="loan_start_time">
+            <mat-header-cell *matHeaderCellDef> Loan date </mat-header-cell>
+            <mat-cell *matCellDef="let bookings"> {{bookings.booking_source.loan_start_time|date: 'd/M/yyyy'}}
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="loan_end_time">
+            <mat-header-cell *matHeaderCellDef> Return date </mat-header-cell>
+            <mat-cell *matCellDef="let bookings"> {{bookings.booking_source.loan_end_time|date: 'd/M/yyyy'}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="quantity">
+            <mat-header-cell *matHeaderCellDef> Quantity </mat-header-cell>
+            <mat-cell *matCellDef="let bookings"> {{bookings.quantity}} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="tableColumns_dialog"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: tableColumns_dialog;"></mat-row>
+        </mat-table>
+        <mat-paginator pageSize="5" showFirstLastButtons></mat-paginator>
+      </div>
+      <div class="column-right">
+        <full-calendar [options]="calendarOptions"></full-calendar>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Details">
+    <div>
+      <mat-list role="list">
+        <mat-list-item role="listitem">Name: {{itemData.item.name}}</mat-list-item>
+        <mat-list-item role="listitem">Category: {{itemData.item.category}}</mat-list-item>
+        <mat-list-item role="listitem">Quantity: {{itemData.item.quantity}}</mat-list-item>
+        <mat-list-item role="listitem">Deposit: {{itemData.item.deposit}}</mat-list-item>
+        <mat-list-item role="listitem">Status: {{itemData.item.item_status}}</mat-list-item>
+        <mat-list-item role="listitem">Remarks: {{itemData.item.remarks}}</mat-list-item>
+      </mat-list>
+    </div>
+  </mat-tab>
+</mat-tab-group>
+
+<div *ngIf="lc.loginStatus.value" mat-dialog-actions align="end" style="vertical-align: bottom;">
+  <button mat-button (click)="openEditForm()">
+    <mat-icon matPrefix>create</mat-icon>
+    Edit
+  </button>
+
+  <button mat-button (click)="confirmDelete()">
+    <mat-icon matPrefix>delete_forever</mat-icon>
+    Delete
+  </button>
+</div>

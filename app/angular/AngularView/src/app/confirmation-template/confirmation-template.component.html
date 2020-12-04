@@ -1,0 +1,35 @@
+<form class="container" style="padding-top:15px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px;" [formGroup]="confirmationMailForm" (ngSubmit)="create_or_update(confirmationMailForm.value)">
+  <mat-form-field appearance="fill" style="width: 100%">
+    <mat-label for="link_string">Link Placeholder</mat-label>
+    <input matInput formControlName="link_string">
+  </mat-form-field>
+  <br>
+  <mat-form-field appearance="fill" style="width: 100%">
+    <mat-label for="subject">Subject</mat-label>
+    <input matInput formControlName="subject">
+  </mat-form-field>
+  <br>
+  <editor 
+    formControlName="template"
+    [apiKey]="apiKey"
+    [init]="{
+      height: 300,
+      menubar: false,
+      plugins: [
+        'advlist autolink lists link image charmap print preview anchor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media table paste code help wordcount',
+        'table'
+      ],
+      toolbar:
+        'undo redo | formatselect | bold italic underline backcolor | \
+        alignleft aligncenter alignright alignjustify | \
+        bullist numlist outdent indent | removeformat | help \
+        table tabledelete | tableprops tablerowprops tablecellprops | \
+        tableinsertrowbefore tableinsertrowafter tabledeleterow | \ 
+        tableinsertcolbefore tableinsertcolafter tabledeletecol | tablemergecells'
+    }"
+  ></editor>
+  <br>
+  <button mat-raised-button color="primary">Submit</button>
+</form>

@@ -1,0 +1,32 @@
+.container {
+    background-image: url("../Orange.jpg");
+    background-position: right bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 86%;
+  }
+  .column-left {
+    float: left;
+    width: 20%;
+  }
+
+  .column-right {
+    float: right;
+    width: 80%;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+  .long-input {
+    width: 100%;
+  }
+
+  .fab-bottom-right {
+    position: fixed !important;
+    left: 20px;
+    bottom: 15px;
+  }

@@ -1,0 +1,102 @@
+<div class="container" style="padding-top:15px; padding-left: 30px; padding-right: 30px; padding-bottom: 20px;">
+  <h1 style="padding-top:10px">Booking List</h1>
+  <div class="row">
+    <div class="column-left">
+      <p>Click each row for more details.</p>
+    </div>
+    <div class="column-right">
+      <button mat-raised-button style="float: right;" color="primary" (click)="openWeeklySummary()">
+        <mat-icon matPrefix>date_range</mat-icon>
+        Weekly Summary
+      </button>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 10px;">
+    <div class="column-left">
+      <h2 style="color:#777777">Filter</h2>
+      <form [formGroup]="filterForm" (ngSubmit)="onSubmit()">
+        <mat-label>Filter by name</mat-label>
+        <br>
+        <mat-form-field style="margin-top:10px;" appearance="legacy">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+
+        <br>
+        <mat-label>Filter by booking date</mat-label>
+        <br>
+        <mat-form-field style="margin-top:10px;" appearance="legacy">
+          <mat-label>From (dd/mm/yyyy)</mat-label>
+          <input matInput formControlName="fromDate" class="form-control" [matDatepicker]="startpicker">
+          <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+          <mat-datepicker #startpicker></mat-datepicker>
+          <mat-error>Please enter a valid date.</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field style="margin-top:10px;" appearance="legacy">
+          <mat-label>To (dd/mm/yyyy)</mat-label>
+          <input matInput formControlName="toDate" class="form-control" [matDatepicker]="endpicker">
+          <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+          <mat-datepicker #endpicker></mat-datepicker>
+          <mat-error>Please enter a valid date.</mat-error>
+        </mat-form-field>
+
+        <br>
+        <mat-label>Filter by booking status</mat-label>
+        <br>
+        <mat-form-field style="margin-top:10px;" appearance="legacy">
+          <mat-label>Status</mat-label>
+          <input matInput formControlName="status">
+        </mat-form-field>
+        <br>
+        <button type="submit" mat-raised-button color="primary" [disabled]="!filterForm.valid">
+          <mat-icon matPrefix>search</mat-icon>
+          Filter
+        </button>
+      </form>
+    </div>
+    <div class="column-right">
+      <mat-table [dataSource]="bookings" matSort class="mat-elevation-z8">
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef [ngClass]="'w-40'" mat-sort-header>S/N</mat-header-cell>
+          <mat-cell *matCellDef="let booking" [ngClass]="'w-40'">{{booking.id}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+          <mat-cell *matCellDef="let booking">{{booking.name}}</mat-cell>
+        </ng-container>
+        <!--<ng-container matColumnDef="email">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+          <mat-cell *matCellDef="let booking">{{booking.email}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="organization">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Organization</mat-header-cell>
+          <mat-cell *matCellDef="let booking">{{booking.organization}}</mat-cell>
+        </ng-container>-->
+        <ng-container matColumnDef="time_booked">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Time Booked</mat-header-cell>
+          <mat-cell *matCellDef="let booking">{{booking.time_booked|date: 'd/M/yyyy'}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="loan_start_time">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Loan date</mat-header-cell>
+          <mat-cell *matCellDef="let booking">{{booking.loan_start_time|date: 'd/M/yyyy'}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="loan_end_time">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Return date</mat-header-cell>
+          <mat-cell *matCellDef="let booking">{{booking.loan_end_time|date: 'd/M/yyyy'}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="deposit_left">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Deposit Left (S$)</mat-header-cell>
+          <mat-cell *matCellDef="let booking">{{booking.deposit_left}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef [ngClass]="'w-100'" mat-sort-header>Status</mat-header-cell>
+          <mat-cell *matCellDef="let booking" [ngClass]="'w-100'">{{returnStatusString(booking.status)}}</mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
+        <mat-row matRipple *matRowDef="let booking; columns: tableColumns;" (click)=openDialog(booking)></mat-row>
+      </mat-table>
+      <mat-paginator class="mat-elevation-z8" [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div>

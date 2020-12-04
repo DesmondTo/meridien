@@ -1,0 +1,32 @@
+.container {
+    background-image: url("../Blue.jpg");
+    background-position: right bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 86%;
+}
+
+.w-40 {
+max-width: 40px;
+}
+
+.w-100 {
+max-width: 100px;
+}
+
+.column-left {
+float: left;
+width: 20%;
+}
+
+.column-right {
+float: right;
+width: 80%;
+}
+
+.row:after {
+content: "";
+display: table;
+clear: both;
+}
+

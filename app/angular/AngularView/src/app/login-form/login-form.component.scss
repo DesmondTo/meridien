@@ -1,0 +1,25 @@
+.full-width{
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+
+}
+
+.mat-elevation-z8 {
+    width:300px;
+    height: 40vh;
+    margin:auto;
+    margin-top: 10%;
+    text-align: center;
+    background-image: url("../Orange.jpg");
+    background-position: right bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.h2 {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}

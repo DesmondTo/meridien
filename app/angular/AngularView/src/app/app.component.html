@@ -1,0 +1,35 @@
+<div class="sticky">
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span mat-button routerLink="home" routerLinkActive= "active" id ="main-title">
+        <span class="NUSSU">NUSSU</span> Logistics Management System
+      </span>
+      <span class="fill-remaining-space"></span>
+
+      <div class= "services">
+        <a *ngIf="lc.loginStatus.value" mat-button routerLink="bookings" routerLinkActive="active">Booking List</a>
+        <a *ngIf="lc.loginStatus.value" mat-button routerLink="items" routerLinkActive="active">Items</a>
+        <a *ngIf="lc.loginStatus.value" mat-button routerLink="templates" routerLinkActive="active">Email templates</a>
+        <a *ngIf="lc.loginStatus.value" mat-button routerLink="mailer" routerLinkActive="active">Send email</a>
+        <a *ngIf="lc.loginStatus.value" mat-button routerLink="confirmation_template"
+          routerLinkActive="active">Confirmation template</a>
+        <a *ngIf="lc.loginStatus.value" mat-button routerLink="edit" routerLinkActive="active">Make a Booking</a>
+      </div>
+
+      <a *ngIf="!lc.loginStatus.value" mat-raised-button color ="accent" mat-button routerLink="login" routerLinkActive="active">
+         Admin Login
+      </a>
+
+      <a mat-button mat-raised-button color="accent">
+        <app-logout></app-logout>
+      </a>
+
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <mat-progress-bar class="fast-fade" mode="indeterminate" color="accent" [style.visibility]="progressBarVisible ? 'visible' : 'hidden'"
+  [style.opacity]="progressBarVisible ? '1' : '0' ">
+  </mat-progress-bar>
+</div>
+
+<router-outlet></router-outlet>

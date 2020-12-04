@@ -1,0 +1,46 @@
+<div class="container" style="padding:20px; width: 300px; margin:auto">
+    <h1 mat-dialog-title style="padding-top:10px">{{getDialogTitle()}}</h1>
+    <form mat-dialog-content [formGroup]="itemForm">
+        <mat-form-field class="field-full-width" appearance="legacy">
+            <mat-label>Name</mat-label>
+            <input matInput class="form-control" formControlName="name" required>
+            <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="field-full-width" appearance="legacy">
+            <mat-label>Category</mat-label>
+            <input matInput class="form-control" formControlName="category" required>
+            <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="field-full-width" appearance="legacy">
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" class="form-control" formControlName="quantity" required min="1"
+                pattern="\d+">
+            <mat-error>Please enter a positive integer.</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="field-full-width" appearance="legacy">
+            <span matPrefix>$ &nbsp;</span>
+            <mat-label>Deposit</mat-label>
+            <input matInput type="number" class="form-control" formControlName="deposit" required min="0">
+            <mat-error>Please enter a positive number.</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="field-full-width" appearance="legacy">
+            <mat-label>Status</mat-label>
+            <input matInput class="form-control" formControlName="item_status" required>
+            <mat-error>This field is required.</mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="field-full-width" appearance="legacy">
+            <mat-label>Remarks</mat-label>
+            <textarea matInput class="form-control" formControlName="remarks"></textarea>
+        </mat-form-field>
+        <br>
+    </form>
+    <mat-dialog-actions align="end">
+        <button mat-button [mat-dialog-close]="true">Cancel</button>
+        <button mat-raised-button (click)="onSubmit()" [disabled]="!itemForm.valid" type="submit" color="primary">Submit</button>
+    </mat-dialog-actions>
+</div>

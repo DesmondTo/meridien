@@ -1,0 +1,61 @@
+@media print {
+    button {
+        display: none;
+    }
+}
+
+.fade{
+    transition: all 0.2s
+}
+
+.parent{
+    position: relative
+}
+
+.child{
+    position: absolute;
+    top: 0;
+}
+
+.container {
+    height: 90%;
+    background-color: hsla(0, 0%, 97%, 0);
+    /* background-color: aqua; */
+    margin-left: 0%;
+    margin-right: 0%;
+    margin-bottom: 0%;
+    background-image: url("../Orange.jpg");
+    background-position: right bottom;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.form {
+    margin-bottom: 0%;
+}
+
+.column-left {
+    float: left;
+    width: 40%;
+}
+
+.column-right {
+    float: right;
+    width: 55%;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+mat-list-item {
+    margin-top: 1%;
+    height: auto !important;
+    white-space: pre-wrap;
+}
+
+mat-checkbox.mat-checkbox-layout {
+    white-space: normal !important;
+}
