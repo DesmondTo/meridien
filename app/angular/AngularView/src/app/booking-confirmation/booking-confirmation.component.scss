@@ -3,3 +3,19 @@
         display: none;
     }
 }
+
+.column-left {
+    float: left;
+    width: 50%;
+  }
+
+  .column-right {
+    float: right;
+    width: 50%;
+  }
+
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
